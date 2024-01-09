@@ -8,28 +8,46 @@ public class ObstacleSpawner : MonoBehaviour, IPauseable
     [Inject] private DiContainer diContainer;
     [SerializeField] private Obstacle obstaclePrefab;
     [SerializeField] private float spawnRate = 7.5f;
+    [SerializeField] private float speedInterval = 1;
     private int obstacleMinHeight = -5;
     private int obstacleMaxHeight = 5;
-    private float speedInterval = 1;
     public bool IsPaused { get; set; }
-
-    private Coroutine spawnCoroutine;
+    private float currentTime = 0;
 
     public void Initialize()
     {
         pauseManager.Register(this);
-        StartSpawning();
+        SpawnSingleObstacle();
     }
 
-    private IEnumerator SpawnObstacles()
+    private void Update()
     {
-        while (true)
+        if (IsPaused)
+            return;
+
+        SpawnObstacles();
+
+        if (spawnRate > 3)
         {
-            if (IsPaused == false)
-            {
-                yield return new WaitForSeconds(spawnRate);
-                SpawnSingleObstacle();
-            }
+            spawnRate -= Time.deltaTime / 50;
+        }
+
+        if (speedInterval > 0.45f)
+        {
+            speedInterval -= Time.deltaTime / 300;
+        }
+    }
+
+    private void SpawnObstacles()
+    {
+        if (currentTime < spawnRate)
+        {
+            currentTime += Time.deltaTime;
+        }
+        else
+        {
+            SpawnSingleObstacle();
+            currentTime = 0;
         }
     }
 
@@ -41,11 +59,5 @@ public class ObstacleSpawner : MonoBehaviour, IPauseable
             new Vector2(transform.position.x, transform.position.y + randomHeight),
             Quaternion.identity, null);
         obs.Init(speedInterval);
-    }
-
-    private void StartSpawning()
-    {
-        SpawnSingleObstacle();
-        spawnCoroutine ??= StartCoroutine(SpawnObstacles());
     }
 }

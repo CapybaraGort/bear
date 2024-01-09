@@ -23,10 +23,10 @@ public class Player : MonoBehaviour, IPauseable
 
     private void Update()
     {
-        if (IsPaused == false)
-        {
-            Movement();
-        }
+        if (IsPaused)
+            return;
+
+        Movement();
     }
 
     private void Movement()

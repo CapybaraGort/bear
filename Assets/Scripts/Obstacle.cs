@@ -10,17 +10,17 @@ public class Obstacle : MonoBehaviour, IPauseable
 
     private void Update()
     {
-        if (IsPaused == false)
+        if (IsPaused)
+            return;
+
+        if (currentTime < speedInterval)
         {
-            if (currentTime < speedInterval)
-            {
-                currentTime += Time.deltaTime;
-            }
-            else
-            {
-                transform.position = new Vector2(transform.position.x - 1, transform.position.y);
-                currentTime = 0;
-            }
+            currentTime += Time.deltaTime;
+        }
+        else
+        {
+            transform.position = new Vector2(transform.position.x - 1, transform.position.y);
+            currentTime = 0;
         }
     }
 
