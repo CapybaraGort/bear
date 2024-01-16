@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+using YG;
 
 public class MainMenu : MonoBehaviour
 {
@@ -12,17 +13,27 @@ public class MainMenu : MonoBehaviour
     public void Initialize()
     {
         pauseManager.SetPause(true);
-        scoreText.text = "Ваш рекорд: " + SaveableData.Record;
+    
+        if(YandexGame.SDKEnabled)
+        {
+            SetRecordText();
+        }
     }
 
     private void OnEnable()
     {
         playButton.onClick.AddListener(OnPlayClick);
+        YandexGame.GetDataEvent += SetRecordText;
     }
 
     private void OnDisable()
     {
         playButton.onClick.RemoveListener(OnPlayClick);
+        YandexGame.GetDataEvent -= SetRecordText;
+    }
+    private void SetRecordText()
+    {
+        scoreText.text = "Ваш рекорд: " + YandexGame.savesData.Record;
     }
 
     private void OnPlayClick()

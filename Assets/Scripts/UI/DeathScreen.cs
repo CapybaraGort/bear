@@ -2,6 +2,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using YG;
 
 public class DeathScreen : MonoBehaviour
 {
@@ -32,6 +33,14 @@ public class DeathScreen : MonoBehaviour
     {
         child.SetActive(true);
         pauseManager.SetPause(true);
-        score.text = "Ваш рекорд: " + SaveableData.Record;
+
+        if (RuntimeData.CurrentScore > YandexGame.savesData.Record)
+        {
+            YandexGame.savesData.Record = RuntimeData.CurrentScore;
+            YandexGame.SaveProgress();
+        }
+
+        score.text = "Счет: " + RuntimeData.CurrentScore;
+        RuntimeData.ClearScore();
     }
 }

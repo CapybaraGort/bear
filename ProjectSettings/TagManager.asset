@@ -5,7 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - DestroyWall
-  - Wall
+  - Obstacle
   layers:
   - Default
   - TransparentFX
@@ -40,6 +40,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: BG
+    uniqueID: 919480153
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
